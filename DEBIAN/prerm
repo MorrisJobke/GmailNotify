@@ -1,0 +1,5 @@
+#!/bin/bash
+if [ -w /usr/lib/gmailnotify/gmailnotifykeyring.pyc ]
+then
+	rm /usr/lib/gmailnotify/gmailnotifykeyring.pyc
+fi

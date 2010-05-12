@@ -1,0 +1,10 @@
+Package: gmailnotify
+Version: 0.1
+Priority: optional
+Architecture: all
+Essential: no
+Depends: python-feedparser, python-indicate, python-notify 
+Installed-Size: 57
+Maintainer: Morris Jobke <morris.jobke@gmail.com>
+Description: Google Mail Notifier
+	A small notifier for Gmail in the messaging menu.
