@@ -36,9 +36,12 @@ class Keyring:
 			except gnomekeyring.DeniedError:
 				login = None
 				password = None
-				authToken = 0
 			else:
-				login, password = secret.split(self.dividingSymbol)
+				try:
+					login, password = secret.split(self.dividingSymbol)
+				except:
+					login = None
+					password = None
 		else:
 			login = None
 			password = None
