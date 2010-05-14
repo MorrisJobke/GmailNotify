@@ -33,9 +33,9 @@ class GMailNotifySettings:
 		self.valid = False
 		self.initialisation = True
 		self.timeouts = 0
-		builder = gtk.Builder()	
-		builder.add_from_file(self.gladeFile)
-		builder.connect_signals({
+		self.builder = gtk.Builder()	
+		self.builder.add_from_file(self.gladeFile)
+		self.builder.connect_signals({
 			'on_settings_destroy': 			self.quit,  
 			'on_close_clicked': 			self.quit, 
 			'gtk_main_quit': 				self.quit,
@@ -44,13 +44,17 @@ class GMailNotifySettings:
 			'on_entry_password_changed':	self.refreshTimeout,
 		})
 		
-		self.window = builder.get_object('settings')
-		self.aboutName = builder.get_object('name')
-		self.aboutVersion = builder.get_object('version')
-		self.entryUsername = builder.get_object('entry_username')
-		self.entryPassword = builder.get_object('entry_password')
-		self.validation = builder.get_object('validation')
-		self.validationImage = builder.get_object('validation_image')
+		# save needed object to manipulate
+		self.window = self.builder.get_object('settings')
+		self.aboutName = self.builder.get_object('name')
+		self.aboutVersion = self.builder.get_object('version')
+		self.entryUsername = self.builder.get_object('entry_username')
+		self.entryPassword = self.builder.get_object('entry_password')
+		self.validation = self.builder.get_object('validation')
+		self.validationImage = self.builder.get_object('validation_image')
+		self.applyButton = self.builder.get_object('apply')
+		
+		self.applyButton.set_sensitive(False)
 		self.gkr = Keyring(GmailNotifyName, 'login data')
 		self.loadSettings()
 		#self.naming()
@@ -67,16 +71,13 @@ class GMailNotifySettings:
 	def save(self, widget=None):
 		""" save settings to keyring """
 		print 'save settings'		
-		if self.valid == True:
-			print 'valid'
-		else:
-			print 'not valid'
 		self.gkr.setLogin(self.entryUsername.get_text(), self.entryPassword.get_text())		
 	
 	def quit(self, widget):
 		""" save settings and close window """
+		if self.valid:
+			self.save()
 		print 'quit settings dialog'
-		self.save()
 		gtk.main_quit()
 	
 	def loadSettings(self):		
@@ -91,6 +92,7 @@ class GMailNotifySettings:
 		""" initialize timeout - prevent check login information after every type in """
 		if self.initialisation:
 			return
+		self.applyButton.set_sensitive(False)
 		self.validationImage.set_from_stock('gtk-refresh', gtk.ICON_SIZE_SMALL_TOOLBAR)
 		self.validation.set_text('Checking ...')
 		self.timeouts += 1
@@ -118,10 +120,12 @@ class GMailNotifySettings:
 	def setValid(self, value):
 		""" sets icon and text if valid or not """
 		if value:
+			self.applyButton.set_sensitive(True)
 			self.valid = True
 			self.validation.set_text('Valid login information')
 			self.validationImage.set_from_stock('gtk-yes', gtk.ICON_SIZE_SMALL_TOOLBAR)
 		else:
+			self.applyButton.set_sensitive(False)
 			self.valid = False
 			self.validation.set_text('Invalid login information')
 			self.validationImage.set_from_stock('gtk-dialog-error', gtk.ICON_SIZE_SMALL_TOOLBAR)
