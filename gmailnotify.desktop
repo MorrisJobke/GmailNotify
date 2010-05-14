@@ -1,10 +1,10 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Google Mail Notify
+Name[de_DE]=Google Mail Notify
 Icon=gmailnotify.svg
 Type=Application
-Categories=Network;
-Exec=gmailnotify.py
+Categories=GNOME;GTK;Settings;DesktopSettings;
+Exec=gmailnotify
 StartupNotify=false
 Terminal=false
-Name[de_DE]=Google Mail Notify
