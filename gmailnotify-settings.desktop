@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Name=Google Mail Notify Configuration
+Name[de_DE]=Google Mail Notify Konfiguration
+Icon=gmailnotify.svg
+Type=Application
+Categories=GNOME;GTK;Settings;DesktopSettings;
+Exec=gmailnotify-settings
+StartupNotify=false
+Terminal=false
