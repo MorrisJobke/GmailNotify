@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 #
 # Copyright (C) Morris Jobke 2010 <morris.jobke@googlemail.com>
 # 
@@ -28,7 +29,7 @@ GmailNotifyName = 'Google Mail Notify'
 
 class GMailNotifySettings:
 	def __init__(self):
-		self.gladeFile = '/usr/share/applications/gmailnotify-settings.glade'
+		self.gladeFile = '/usr/lib/gmailnotify/gmailnotify-settings.glade'
 		self.valid = False
 		self.initialisation = True
 		self.timeouts = 0
