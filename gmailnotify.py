@@ -78,6 +78,7 @@ class Notifier:
 		
 		self.request = urllib2.Request('https://mail.google.com/mail/feed/atom/')
 		self.indicators = []
+		self.firstRequest = False
 		
 		if not username == None and not password == None: 		
 			self.request.add_header('Authorization', 'Basic %s'%(base64.encodestring('%s:%s'%(username, password))[:-1]))
@@ -103,11 +104,14 @@ class Notifier:
 		try:
 			data = feedparser.parse(urllib2.urlopen(self.request).read())
 		except:
-			self.error = pynotify.Notification(GmailNotifyName, 'An error occured - May the login information is not valid', GmailIcon)
+			errorMsg = 'An error occured'
+			if self.firstRequest:
+				indicator = GMailIndicator('Setting up ' + GmailNotifyName, GmailNotifyName, None, None, True)
+				self.indicators.append(indicator)
+				self.indicators[-1].show()
+				errorMsg += ' - May the login information is not valid'			
+			self.error = pynotify.Notification(GmailNotifyName, errorMsg, GmailIcon)
 			self.error.show()
-			indicator = GMailIndicator('Setting up ' + GmailNotifyName, GmailNotifyName, None, None, True)
-			self.indicators.append(indicator)
-			self.indicators[-1].show()
 			
 			deleteIndicators = []
 		
@@ -115,6 +119,7 @@ class Notifier:
 				if i.title in ['Receiving data ...']:
 					deleteIndicators.append(i)
 		else:
+			self.firstRequest = False
 			for mail in data['entries']:
 				if not mail['title'] in [indicator.title for indicator in self.indicators]:
 					print 'new mail ...'
